@@ -119,8 +119,6 @@ func encodeFile(fileName string) {
 		reversedCodes[value] = key
 	}
 
-	fmt.Println(reversedCodes)
-
 	enc := gob.NewEncoder(fmap)
 	err = enc.Encode(reversedCodes)
 	if err != nil {
@@ -144,9 +142,11 @@ func encodeFile(fileName string) {
 
 	writer := bufio.NewWriter(fdata)
 	byteString := ""
+	test := ""
 
 	for _, bit := range binaryString {
 		byteString += string(bit)
+		test += string(bit)
 		if len(byteString) > 7 {
 			b := []byte{byte(binaryStringToInt(byteString))}
 			_, err = writer.Write(b)
@@ -157,8 +157,6 @@ func encodeFile(fileName string) {
 			byteString = ""
 		}
 	}
-
-	fmt.Println(binaryString)
 
 	if len(byteString) != 0 {
 		for {
@@ -208,20 +206,18 @@ func decodeFile(fileName string) {
 	binaryString := ""
 	for _, b := range dat {
 		str := intToBinaryString(int(b))
-		fmt.Printf("%v-%v\n", b, str)
 		binaryString += str
 	}
 
 	decodedString := ""
 	temp := ""
-	fmt.Println(codes)
 
 	for _, ch := range binaryString {
 		if codes[temp] == "" {
 			temp += string(ch)
 		} else {
 			decodedString += codes[temp]
-			temp = ""
+			temp = string(ch)
 		}
 	}
 
